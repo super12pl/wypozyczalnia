@@ -1,51 +1,44 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import '../App.css';
 
-function Main() {
+function Reservations() {
   const navigate = useNavigate()
-  var [samochody,setSamochody] = useState([])
-  const [loaded,setLoaded] = useState(false)
-  const [sort,setSort] = useState("id")
-  useEffect(()=>{
-    fetch("http://localhost/wypozyczalnia/reservations.php?klient=0").then(res => res.json()).then((result)=>{
-      setSamochody(result)
+  var [rezerwacje, setRezerwacje] = useState([])
+  const [loaded, setLoaded] = useState(false)
+  useEffect(() => {
+    fetch("http://localhost/wypozyczalnia/reservations.php?klient="+localStorage.getItem("klient")).then(res => res.json()).then((result) => {
+      setRezerwacje(result)
     })
-  },[loaded])
-  
+  }, [loaded])
+
 
   return (
     <div className="App">
+      <button onClick={()=>navigate("/main")}>Wróć</button>
       <h1>Rezerwacje</h1>
-        <table>
-          <thead>
+      <table>
+        <thead>
           <tr>
             <th>Model</th>
-            <th>Typ</th>
-            <th>Ilość Miejsc</th>
-            <th>Ilość Drzwi</th>
-            <th>Skrzynia Biegów</th>
-            <th>Klimatyzacja</th>
-            <th>Cena</th>
+            <th>Data Odbioru</th>
+            <th>Data Zwrotu</th>
           </tr>
-          </thead>
-          <tbody>
-          {samochody.map(samochod =>(
-            <tr key={samochod.id}>
-              <td>{samochod.model}</td>
-              <td>{samochod.typ}</td> 
-              <td>{samochod.ilosc_miejsc}</td> 
-              <td>{samochod.ilosc_drzwi}</td> 
-              <td>{samochod.skrzynia}</td> 
-              <td>{samochod.klimatyzacja}</td>
-              <td>{samochod.cena}</td> 
+        </thead>
+        <tbody>
+          {rezerwacje.map(rezerwacja => (
+            <tr key={rezerwacja.id}>
+              <td>{rezerwacja.model}</td>
+              <td>{rezerwacja.data_odbioru}</td>
+              <td>{rezerwacja.data_zwrotu}</td>
             </tr>
           ))}
-          </tbody>
-         
-        </table>
+        </tbody>
+
+      </table>
 
     </div>
   );
 }
 
-export default Main;
+export default Reservations;

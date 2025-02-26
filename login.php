@@ -5,10 +5,10 @@ $connect = mysqli_connect("localhost","root","","wypozyczalnia");
 $query = "SELECT * FROM `klienci` WHERE email ='".$_REQUEST["email"]."' AND haslo ='".$_REQUEST["password"]."'";
 $result = mysqli_query($connect,$query);
 if(mysqli_num_rows($result)>0) {
-    echo json_encode(true);
+    echo json_encode(mysqli_fetch_row($result)[0]);
 }
 else{
-    echo json_encode(false);
+    echo json_encode("null");
 }
 
 ?>

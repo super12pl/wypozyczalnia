@@ -5,13 +5,15 @@
   justify-content: center;
   flex-direction: column;
 }
-.flexCol{
+
+.flexCol {
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -42,16 +44,18 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
 
-table{
+table {
   border: 2px solid black;
   background-color: #302020;
 }
-th{
+
+th {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   width: 150px;
   height: 50px;
@@ -61,10 +65,23 @@ th{
   font-weight: bold;
   font-size: 20px;
 }
-td{
+
+td {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   width: 150px;
   height: 50px;
   border: 2px solid black;
   color: rgb(139, 67, 67);
+}
+
+#reservationModal {
+  position: absolute;
+  background-color:rgb(139, 67, 67) ;
+  border: 2px solid black;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30vw;
+  height: 30vh;
+  border-radius: 5vw;
 }
