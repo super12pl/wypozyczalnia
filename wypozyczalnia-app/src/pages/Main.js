@@ -7,8 +7,10 @@ function Main() {
   const [samochody, setSamochody] = useState([])
   const [loaded, setLoaded] = useState(false)
   const [sort, setSort] = useState("id")
-  const [beingReserved, setReserved] = useState(-1)
+  const [beingReserved, setReserved] = useState([-1,-1])
   const [reservationDisplay, setReservationDisplay] = useState("none")
+  const [reservationStart,setReservationStart] = useState(new Date())
+  const [reservationEnd,setReservationEnd] = useState(new Date())
   useEffect(() => {
     fetch("http://localhost/wypozyczalnia/").then(res => res.json()).then((result) => {
       setSamochody(result)
@@ -24,10 +26,15 @@ function Main() {
       }
     });
   }
-  function make_reservation(id) {
-    setReserved(id)
+  function make_reservation(id,idreal) {
+    console.log(id)
+    setReserved([id,idreal])
     setReservationDisplay("flex")
 
+  }
+  function reserve(){
+    setReservationDisplay("none")
+    fetch("http://localhost/wypozyczalnia/makereservation.php?auto="+beingReserved[1]+"&start="+reservationStart+"&end="+reservationEnd+"&klient="+Number(localStorage.getItem("klient"))).then(res => res.json()).then((result)=>{console.log(result)})
   }
 
 
@@ -38,10 +45,10 @@ function Main() {
         <button onClick={() => { localStorage.setItem("klient", null); navigate("/") }}>Wyloguj</button>
       </div>
       <div id='reservationModal' className='flexCol' style={{ display: reservationDisplay }}>
-        <form className='flexCol' style={{width:"100%"}}>
+        <form action={reserve} className='flexCol' style={{width:"100%"}}>
           <h3>{beingReserved >-1 ? samochody[beingReserved].model : ""}</h3>
-          <label>Data odbioru: <input type="date-local" id='odbior'></input></label>
-          <label>Data zwrotu: <input type="date-local" id='zwrot'></input></label>
+          <label>Data odbioru: <input type="datetime-local" onChange={(e)=>setReservationStart(e.target.value)}></input></label>
+          <label>Data zwrotu: <input type="datetime-local" onChange={(e)=>setReservationEnd(e.target.value)}></input></label>
           <span>
             <button type="submit">Potwierdź</button>
             <button onClick={() => { setReserved(-1); setReservationDisplay("none") }}>Anuluj</button>
@@ -64,8 +71,8 @@ function Main() {
           </tr>
         </thead>
         <tbody>
-          {samochody.map(samochod => (
-            <tr key={samochod.id}>
+          {samochody.map((samochod,index) => (
+            <tr key={index}>
               <td>{samochod.model}</td>
               <td>{samochod.typ}</td>
               <td>{samochod.ilosc_miejsc}</td>
@@ -73,7 +80,7 @@ function Main() {
               <td>{samochod.skrzynia}</td>
               <td>{samochod.klimatyzacja}</td>
               <td>{samochod.cena}</td>
-              <td><button onClick={() => make_reservation(samochod.id)}>Zarezerwuj</button></td>
+              <td><button onClick={() => make_reservation(index,samochod.id)}>Zarezerwuj</button></td>
             </tr>
           ))}
         </tbody>
